@@ -1,34 +1,48 @@
-import {useState} from 'react'
+import {useState,useEffect} from 'react'
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { orange } from '@material-ui/core/colors';
 import jsonp from 'jsonp';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Box from '@material-ui/core/Box';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import theme from '../Theme'
 
-const theme = createMuiTheme({
-    palette: {
-      primary: orange,
-      type: "dark"
-    },
-  });
 
 const useStyle = makeStyles({
     root: {
-        '& label.Mui-focused': {
+        '& .Mui-focused': {
             color: orange,
-          },
+        },
+        '& .MuiOutlinedInput-root': {
+          '&:hover fieldset': {
+              borderColor: orange
+          }
+        }
+    },
+    clearIndicator: {
+        color: "#ffa726"
     }
 })
 
 
-const options = ['Option 1', 'Option 2'];
-
-
-const SearchInput = () => {
+const SearchInput = ({onVideoSearch,searchResults}) => {
     const useClass = useStyle();
     const [value, setValue] = useState('');
+
     const [optionsSearch,setOptionsSearch] = useState([]);
+    const [loading,setLoading] = useState(false);
+
+    useEffect(() => {
+      if(searchResults.length === 0){
+          setValue('');
+      }
+      if(searchResults.length > 0){
+          setLoading(false);
+      }
+    }, [searchResults])
 
     const fetchSearchResults = (term) => {
         jsonp(
@@ -48,24 +62,35 @@ const SearchInput = () => {
         fetchSearchResults(e.target.value);
     }
 
-    console.log(optionsSearch);
+    const handleOnChange = (event, val) => {
+        setValue(val);
+        onVideoSearch(val);
+        if(val !== null){
+          setLoading(true);
+        }
+    }
 
-    
     return (
         <ThemeProvider theme={theme}>
+          <CssBaseline />
             <Autocomplete 
-                className={useClass.root}
+                className = {`${useClass.clearIndicator} ${useClass.root} ${useClass.inputRoot}`}
+                classes = {useClass}
                 value={value}
                 onKeyUp = {handleOnKeyUp}
-                onChange={(event, newValue) => {
-                setValue(newValue);
-                }}
+                onChange={handleOnChange}
                 id="controllable-states-demo"
+                freeSolo
                 options={optionsSearch}
                 getOptionSelected={(option, value) => option.description === value.description}
                 renderInput={(params) => <TextField {...params} className={useClass.root} label="Search Youtube Video" id="input-with-icon-adornment" variant="outlined"
                 />}
             />
+            <Box display="flex" justifyContent="center" p={2}>
+              {
+                (loading === false) ? null : <CircularProgress />
+              }
+            </Box>
         </ThemeProvider>
     )
 }

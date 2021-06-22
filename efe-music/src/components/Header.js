@@ -9,7 +9,7 @@ const Header = ({classes}) => {
         <Grid item xs={12} className={classes.root}>
             <Paper className={classes.paper} style= {{ borderRadius: 0, padding: "20px" }} >
                     <Box display="flex" justifyContent="flex-end" >
-                    <Button  variant="contained">
+                    <Button  variant="contained" color="primary">
                         Primary
                     </Button>
                     </Box>
