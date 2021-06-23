@@ -8,7 +8,8 @@ const theme = createMuiTheme({
       type: "dark",
       input: {
           border: orange
-      }
+      },
+      success: orange
     },
     overrides:{
       MuiCssBaseline: {

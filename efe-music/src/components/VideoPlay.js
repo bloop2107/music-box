@@ -1,7 +1,9 @@
 import ReactPlayer from "react-player";
 import { useState,useEffect } from 'react'
+import Playbar from './Playbar'
 
-const VideoPlay = ({activeVideoId}) => {
+const VideoPlay = ({activeVideoId, mainVideo, nextActive}) => {
+    const urlUtube = 'https://www.youtube.com/watch?v='; 
 
     const [activeVideo, setActiveVideo] = useState({
         url: null,
@@ -21,13 +23,59 @@ const VideoPlay = ({activeVideoId}) => {
     useEffect(() => {
         setActiveVideo({...activeVideo, url: `https://www.youtube.com/watch?v=${activeVideoId}`})
     }, [activeVideoId])
+
+    const currVidIndex = mainVideo.findIndex(
+        (video) => urlUtube+video.videoId === activeVideo.url
+    );
     
+    const onEnded = () => {
+        
+        if (currVidIndex < mainVideo.length) {
+          setActiveVideo({
+            ...activeVideo,
+            url: mainVideo[currVidIndex + 1]
+              ? urlUtube+mainVideo[currVidIndex + 1].videoId
+              : null
+          });
+        }
+        nextActive(mainVideo[currVidIndex + 1].videoId);
+    };
+
+    const onPause = () => {
+        setActiveVideo({...activeVideo,playing: false})
+    }
+
+    const onPlay = () => {
+        setActiveVideo({...activeVideo,playing: true})
+    }
+
+    const onNext = () => {
+        setActiveVideo({
+            ...activeVideo,
+            url: mainVideo[currVidIndex + 1]
+              ? urlUtube+mainVideo[currVidIndex + 1].videoId
+              : null
+        });
+        nextActive(mainVideo[currVidIndex + 1].videoId);
+    } 
+
+    const onPrev = () => {
+        if(currVidIndex > 0){
+            setActiveVideo({
+                ...activeVideo,
+                url: mainVideo[currVidIndex - 1]
+                  ? urlUtube+mainVideo[currVidIndex - 1].videoId
+                  : null
+            });   
+        }
+        nextActive(mainVideo[currVidIndex - 1].videoId);
+    }
 
     return (
         <>
             <ReactPlayer
                 width="100%"
-                height="200px"
+                height="250px"
                 url={activeVideo.url}
                 pip={activeVideo.pip}
                 playing={activeVideo.playing}
@@ -40,7 +88,9 @@ const VideoPlay = ({activeVideoId}) => {
                 duration={activeVideo.duration}
                 playbackRate={activeVideo.playbackRate}
                 loop={activeVideo.loop}
+                onEnded={(onEnded)}
             />   
+            <Playbar onPrev={onPrev} onNext={onNext} onPause={onPause} onPlay={onPlay} />
         </>
     )
 }
