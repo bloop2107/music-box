@@ -6,13 +6,12 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 import {useState} from 'react';
-import Fade from '@material-ui/core/Fade';
+import Fade from '@material-ui/core/Fade';     
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import theme from '../Theme';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
 
 
     const useStyles = makeStyles((theme) => ({
@@ -95,8 +94,6 @@ const ResultVideos = ({ searchResults, res }) => {
             {
                 searchResults.map((video,idx) => 
                         <Box key={idx} p={1} > 
-                        
-                            
                             <Card className={classes.root}>
                                 <ButtonBase
                                     value={video.videoId}
@@ -126,7 +123,7 @@ const ResultVideos = ({ searchResults, res }) => {
             }
             </Box>
                         
-            <Snackbar
+            {/* <Snackbar
                 open={state.open}
                 TransitionComponent={state.Transition}
                 message="I love snacks"
@@ -141,7 +138,7 @@ const ResultVideos = ({ searchResults, res }) => {
                 <Alert onClose={handleClose} severity="success" variant="filled">
                         Add video successfully !
                 </Alert>
-            </Snackbar>
+            </Snackbar> */}
                         
         </Box>
         </ThemeProvider>

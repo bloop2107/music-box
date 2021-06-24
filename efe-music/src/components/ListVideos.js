@@ -67,8 +67,6 @@ const ListVideos = ({classes, mainVideo, activeVideo, activeVideoId}) => {
                                 </ButtonBase>
                                 <Divider />
                             </Box>
-                                
-
                             )
                         }
                     </List>

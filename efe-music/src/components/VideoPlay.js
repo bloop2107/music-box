@@ -34,11 +34,11 @@ const VideoPlay = ({activeVideoId, mainVideo, nextActive}) => {
           setActiveVideo({
             ...activeVideo,
             url: mainVideo[currVidIndex + 1]
-              ? urlUtube+mainVideo[currVidIndex + 1].videoId
-              : null
+            ? urlUtube+mainVideo[currVidIndex + 1].videoId
+            : urlUtube+mainVideo[0].videoId
           });
         }
-        nextActive(mainVideo[currVidIndex + 1].videoId);
+        nextActive((mainVideo[currVidIndex + 1]) ? mainVideo[currVidIndex + 1].videoId : mainVideo[0].videoId );
     };
 
     const onPause = () => {
@@ -56,7 +56,7 @@ const VideoPlay = ({activeVideoId, mainVideo, nextActive}) => {
               ? urlUtube+mainVideo[currVidIndex + 1].videoId
               : null
         });
-        nextActive(mainVideo[currVidIndex + 1].videoId);
+        nextActive((mainVideo[currVidIndex + 1]) ? mainVideo[currVidIndex + 1].videoId : mainVideo[0].videoId );
     } 
 
     const onPrev = () => {
@@ -68,7 +68,7 @@ const VideoPlay = ({activeVideoId, mainVideo, nextActive}) => {
                   : null
             });   
         }
-        nextActive(mainVideo[currVidIndex - 1].videoId);
+        nextActive((mainVideo[currVidIndex - 1]) ? mainVideo[currVidIndex - 1].videoId : mainVideo[0].videoId );
     }
 
     return (

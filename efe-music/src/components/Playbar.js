@@ -10,13 +10,18 @@ import { useState } from 'react';
 
 const useStyles = makeStyles({
     root:  {
-        borderRadius: 0,
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
         display: "flex",
         justifyContent: "center",
         padding: "10px",
     },
     playButton: {
         padding: '5px',
+    },
+    box: {
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
     }
 })
 
@@ -45,7 +50,7 @@ const Playbar = ({onPause,onPlay,onNext,onPrev}) => {
     }
     
     return (
-        <Box boxShadow={3} mb={1}>
+        <Box boxShadow={3} mb={1} className={classes.box}>
             <Paper className={classes.root}>
                     <IconButton aria-label="play" className={classes.playButton}>
                         <SkipPreviousIcon onClick={handlePrev} color="primary" fontSize="large" />

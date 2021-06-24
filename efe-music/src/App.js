@@ -12,6 +12,7 @@ import VideoPay from './components/VideoPlay'
 import Button from '@material-ui/core/Button';
 import logo from './asset/images/logo.png'
 import Box from '@material-ui/core/Box';
+import { Notification } from './components/Notification';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -21,9 +22,10 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     marginBottom: '10px',        
     marginTop: '10px'
+    
   },
   paper: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(2),
     height: "100%",
   },
 }));
@@ -42,10 +44,33 @@ function App() {
 
   const [mainVideo,setMainVideo] = useState([]);
   const [activeVideoId,setActiveVideoId] = useState('');
+  const [statusNotifiParent,setStatusNotifi] = useState(
+    {
+        open: false,
+        title: '',
+        type: ''
+    }
+  )
 
   const handleMainVideo = (value) => {
-      setMainVideo([...mainVideo,value])
-      console.log(value);
+
+      const checkExist = mainVideo.find((video) => video.videoId  === value.videoId);
+      if(!checkExist){
+
+        setMainVideo([...mainVideo,value])
+        setStatusNotifi({...statusNotifiParent,open: true, title: 'Add video successfully ! !',type: 'success'});
+        setTimeout(() => {
+          setStatusNotifi({...statusNotifiParent,open: false})
+        }, 3000);
+        
+      } else {
+
+        setStatusNotifi({...statusNotifiParent,open: true, title: 'Video exist !',type: 'error'});
+        setTimeout(() => {
+          setStatusNotifi({...statusNotifiParent,open: false})
+        }, 3000);
+        
+      }
   }
 
   const handleActiveVideo = (value) => {
@@ -62,9 +87,9 @@ function App() {
         <ThemeProvider theme={theme}>
             <CssBaseline/>
             
-            <Grid container spacing={3}>
+            <Grid container spacing={1}>
                 <Grid item xs={3}>
-                  <Paper className={classes.paper}>
+                  <Paper elevation={3} className={classes.paper}>
                     <Box display="flex" justifyContent="center" >
                         <img src={logo} alt="Logo" style={{width: '200px', marginBottom: "10px"}}/>
                     </Box>
@@ -79,6 +104,7 @@ function App() {
                 </Grid>
                 <SearchVideo handleMainVideo={handleMainVideo} classes={classes} />
             </Grid>
+            <Notification statusNotifiParent={statusNotifiParent}/>
         </ThemeProvider>
       </Container>
       
