@@ -9,10 +9,10 @@ import ListVideos from './components/ListVideos'
 import { orange } from '@material-ui/core/colors';
 import { useState } from 'react'
 import VideoPay from './components/VideoPlay'
-import Button from '@material-ui/core/Button';
-import logo from './asset/images/logo.png'
-import Box from '@material-ui/core/Box';
+import Logo from './components/Logo'
 import { Notification } from './components/Notification';
+import LoginWithGoogle from './components/LoginWithGoogle';
+import VideoCount from './components/VideoCount';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -28,6 +28,11 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     height: "100%",
   },
+  spacing: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+  }
 }));
 
 function App() {
@@ -51,26 +56,36 @@ function App() {
         type: ''
     }
   )
+  const [selectedVideos,setSelectedVideos] = useState([]);
 
   const handleMainVideo = (value) => {
 
       const checkExist = mainVideo.find((video) => video.videoId  === value.videoId);
       if(!checkExist){
-
-        setMainVideo([...mainVideo,value])
-        setStatusNotifi({...statusNotifiParent,open: true, title: 'Add video successfully ! !',type: 'success'});
-        setTimeout(() => {
-          setStatusNotifi({...statusNotifiParent,open: false})
-        }, 3000);
+        if(value.duration < 600){
+            setMainVideo([...mainVideo,value])
+            setStatusNotifi({...statusNotifiParent,open: true, title: 'Add video successfully',type: 'success'});
+            setTimeout(() => {
+              setStatusNotifi({...statusNotifiParent,open: false})
+            }, 3000);
+        } else {
+            setStatusNotifi({...statusNotifiParent,open: true, title: 'Video should not be more than 10 minutes',type: 'error'});
+            setTimeout(() => {
+              setStatusNotifi({...statusNotifiParent,open: false})
+            }, 3000);
+        }
+        
+        
         
       } else {
 
-        setStatusNotifi({...statusNotifiParent,open: true, title: 'Video exist !',type: 'error'});
+        setStatusNotifi({...statusNotifiParent,open: true, title: 'Video exist',type: 'error'});
         setTimeout(() => {
           setStatusNotifi({...statusNotifiParent,open: false})
         }, 3000);
         
       }
+      console.log(value);
   }
 
   const handleActiveVideo = (value) => {
@@ -81,6 +96,13 @@ function App() {
     setActiveVideoId(value)
   }
 
+  const checkedVideo = (value) => {
+      
+  }
+
+  console.log(selectedVideos);
+
+
   return (
     <div className="App">
       <Container fixed className={classes.root}>
@@ -89,18 +111,15 @@ function App() {
             
             <Grid container spacing={1}>
                 <Grid item xs={3}>
-                  <Paper elevation={3} className={classes.paper}>
-                    <Box display="flex" justifyContent="center" >
-                        <img src={logo} alt="Logo" style={{width: '200px', marginBottom: "10px"}}/>
-                    </Box>
-                    <Button Button  variant="contained" color="primary" style={{width: '100%'}}>
-                        Login with Google
-                    </Button>
+                  <Paper elevation={3} className={`${classes.paper} ${classes.spacing}`} >
+                    <Logo />
+                    <LoginWithGoogle />
+                    <VideoCount totalVideo = {mainVideo.length} />
                   </Paper>
                 </Grid>
                 <Grid item xs={5} >  
                       <VideoPay nextActive={nextActive} activeVideoId={activeVideoId} mainVideo={mainVideo}  className={classes.paper}/>
-                      <ListVideos activeVideoId={activeVideoId} activeVideo={handleActiveVideo} mainVideo={mainVideo} classes={classes}/>
+                      <ListVideos checkedVideo={checkedVideo} activeVideoId={activeVideoId} activeVideo={handleActiveVideo} mainVideo={mainVideo} classes={classes}/>
                 </Grid>
                 <SearchVideo handleMainVideo={handleMainVideo} classes={classes} />
             </Grid>

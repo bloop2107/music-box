@@ -3,16 +3,14 @@ import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import Fade from '@material-ui/core/Fade';     
-import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import theme from '../Theme';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
+import Collapse from '@material-ui/core/Collapse';
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -43,6 +41,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
           padding: 0,
           paddingLeft: '15px',
           paddingBottom: '10px !important',
+          paddingRight: "15px"
         },
         desc: {
           fontSize: '10px',
@@ -60,31 +59,27 @@ import CssBaseline from '@material-ui/core/CssBaseline';
     
 
 const ResultVideos = ({ searchResults, res }) => {
-        const [state, setState] = useState({
-            open: false,
-            Transition: Fade,
-        });
-
-        const handleClose = () => {
-            setState({
-            ...state,
-            open: false,
-            });
-        };
-
         const classes = useStyles();
+        const [collapse,setCollapse] = useState(false);
+
+        useEffect(() => {
+            
+        }, [])
+
+        const secondsToHms = (d) => {
+            d = Number(d);
+            var h = Math.floor(d / 3600);
+            var m = Math.floor(d % 3600 / 60);
+            var s = Math.floor(d % 3600 % 60);
+            return `${m}:${(s === 0 ? '00' : +s)}`; 
+        } 
+
+
         const handleOnClick = (e) => {  
             const value = e.currentTarget.value;
             const videoSelect = searchResults.find((item) => item.videoId === value); 
             res(videoSelect);
-            setState({
-                open: true,
-                Transition: Fade,
-            });
         }
-
-
-    
 
     return (
         <ThemeProvider theme={theme}>
@@ -114,6 +109,8 @@ const ResultVideos = ({ searchResults, res }) => {
                                             {video.channel}
                                             <br/>
                                             {video.views}
+                                            <br/>
+                                            {secondsToHms(video.duration)}
                                         </Typography>
                                     </CardContent>
                                 </ButtonBase>
@@ -122,23 +119,6 @@ const ResultVideos = ({ searchResults, res }) => {
                 )         
             }
             </Box>
-                        
-            {/* <Snackbar
-                open={state.open}
-                TransitionComponent={state.Transition}
-                message="I love snacks"
-                key={state.Transition.name}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                onClose={handleClose}
-                autoHideDuration={3000}
-            >
-                <Alert onClose={handleClose} severity="success" variant="filled">
-                        Add video successfully !
-                </Alert>
-            </Snackbar> */}
                         
         </Box>
         </ThemeProvider>

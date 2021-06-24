@@ -8,7 +8,7 @@ const VideoPlay = ({activeVideoId, mainVideo, nextActive}) => {
     const [activeVideo, setActiveVideo] = useState({
         url: null,
         pip: false,
-        playing: true,
+        playing: false,
         controls: false,
         light: false,
         volume: 0.8,
@@ -41,13 +41,27 @@ const VideoPlay = ({activeVideoId, mainVideo, nextActive}) => {
         nextActive((mainVideo[currVidIndex + 1]) ? mainVideo[currVidIndex + 1].videoId : mainVideo[0].videoId );
     };
 
+    const onPaused = () => {
+        setActiveVideo({...activeVideo,playing: false})
+    }
+
+    const onPlayed = () => {
+        setActiveVideo({...activeVideo,playing: true})
+    }
+
     const onPause = () => {
         setActiveVideo({...activeVideo,playing: false})
     }
 
     const onPlay = () => {
-        setActiveVideo({...activeVideo,playing: true})
+        if(activeVideoId){
+            setActiveVideo({...activeVideo,playing: true})
+        } else {
+            setActiveVideo({...activeVideo,url: urlUtube + mainVideo[0].videoId,playing: true})
+            nextActive(mainVideo[0].videoId)
+        }
     }
+
 
     const onNext = () => {
         setActiveVideo({
@@ -71,6 +85,7 @@ const VideoPlay = ({activeVideoId, mainVideo, nextActive}) => {
         nextActive((mainVideo[currVidIndex - 1]) ? mainVideo[currVidIndex - 1].videoId : mainVideo[0].videoId );
     }
 
+
     return (
         <>
             <ReactPlayer
@@ -89,8 +104,10 @@ const VideoPlay = ({activeVideoId, mainVideo, nextActive}) => {
                 playbackRate={activeVideo.playbackRate}
                 loop={activeVideo.loop}
                 onEnded={(onEnded)}
+                onPause={(onPaused)}
+                onPlay ={(onPlayed)}
             />   
-            <Playbar onPrev={onPrev} onNext={onNext} onPause={onPause} onPlay={onPlay} />
+            <Playbar  activeVideo={activeVideo} onPrev={onPrev} onNext={onNext} onPause={onPause} onPlay={onPlay} />
         </>
     )
 }

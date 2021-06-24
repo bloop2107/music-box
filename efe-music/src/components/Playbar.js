@@ -6,7 +6,8 @@ import StopRoundedIcon from '@material-ui/icons/StopRounded';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import { makeStyles } from '@material-ui/core/styles';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles({
     root:  {
@@ -14,7 +15,7 @@ const useStyles = makeStyles({
         borderBottomRightRadius: 10,
         display: "flex",
         justifyContent: "center",
-        padding: "10px",
+        padding: "20px",
     },
     playButton: {
         padding: '5px',
@@ -22,14 +23,21 @@ const useStyles = makeStyles({
     box: {
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
+    },
+    IconButton: {
+        boxShadow: "0px 7px 11px -1px rgba(0,0,0,0.67)"
     }
 })
 
 
 
-const Playbar = ({onPause,onPlay,onNext,onPrev}) => {
+const Playbar = ({activeVideo,onPause,onPlay,onNext,onPrev}) => {
     const classes = useStyles();
-    const [statusVideo,setStatusVideo] = useState(true);
+    const [statusVideo,setStatusVideo] = useState(false);
+
+    useEffect(() => {
+        setStatusVideo(activeVideo.playing);
+    }, [activeVideo])
 
     const handlePause = () => {
         setStatusVideo(false)
@@ -48,23 +56,23 @@ const Playbar = ({onPause,onPlay,onNext,onPrev}) => {
     const handlePrev = () => {
         onPrev();
     }
-    
+
     return (
         <Box boxShadow={3} mb={1} className={classes.box}>
             <Paper className={classes.root}>
-                    <IconButton aria-label="play" className={classes.playButton}>
+                    <Button aria-label="play" className={`${classes.playButton}`}>
                         <SkipPreviousIcon onClick={handlePrev} color="primary" fontSize="large" />
-                    </IconButton>
-                    <IconButton aria-label="play" className={classes.playButton}>
+                    </Button>
+                    <IconButton aria-label="play" className={`${classes.playButton}`}>
                         {
                             statusVideo ? 
                             <StopRoundedIcon onClick={handlePause} color="primary" fontSize="large" /> :
                             <PlayCircleFilledIcon onClick={handlePlay} color="primary" fontSize="large" /> 
                         }
                     </IconButton>
-                    <IconButton aria-label="play" className={classes.playButton}>
+                    <Button aria-label="play" className={`${classes.playButton}`}>
                         <SkipNextIcon onClick={handleNext} color="primary" fontSize="large" />  
-                    </IconButton>
+                    </Button>
             </Paper>
         </Box>
 
