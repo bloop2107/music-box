@@ -1,12 +1,12 @@
 import ReactPlayer from "react-player";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Playbar from "./Playbar";
 import loading from "../../asset/images/loading.svg";
 import Box from "@material-ui/core/Box";
-
-const VideoPlay = ({ activeVideoId, mainVideo, nextActive }) => {
+import { AppContext } from "../../Context/AppProvider";
+const VideoPlay = ({ activeVideoId, nextActive }) => {
    const urlUtube = "https://www.youtube.com/watch?v=";
-
+   const { videos } = useContext(AppContext);
    const [activeVideo, setActiveVideo] = useState({
       url: null,
       pip: false,
@@ -29,23 +29,23 @@ const VideoPlay = ({ activeVideoId, mainVideo, nextActive }) => {
       });
    }, [activeVideoId]);
 
-   const currVidIndex = mainVideo.findIndex(
+   const currVidIndex = videos.findIndex(
       (video) => urlUtube + video.videoId === activeVideo.url
    );
 
    const onEnded = () => {
-      if (currVidIndex < mainVideo.length) {
+      if (currVidIndex < videos.length) {
          setActiveVideo({
             ...activeVideo,
-            url: mainVideo[currVidIndex + 1]
-               ? urlUtube + mainVideo[currVidIndex + 1].videoId
-               : urlUtube + mainVideo[0].videoId,
+            url: videos[currVidIndex + 1]
+               ? urlUtube + videos[currVidIndex + 1].videoId
+               : urlUtube + videos[0].videoId,
          });
       }
       nextActive(
-         mainVideo[currVidIndex + 1]
-            ? mainVideo[currVidIndex + 1].videoId
-            : mainVideo[0].videoId
+         videos[currVidIndex + 1]
+            ? videos[currVidIndex + 1].videoId
+            : videos[0].videoId
       );
    };
 
@@ -62,16 +62,16 @@ const VideoPlay = ({ activeVideoId, mainVideo, nextActive }) => {
    };
 
    const onPlay = () => {
-      if (mainVideo.length > 0) {
+      if (videos.length > 0) {
          if (activeVideoId) {
             setActiveVideo({ ...activeVideo, playing: true });
          } else {
             setActiveVideo({
                ...activeVideo,
-               url: urlUtube + mainVideo[0].videoId,
+               url: urlUtube + videos[0].videoId,
                playing: true,
             });
-            nextActive(mainVideo[0].videoId);
+            nextActive(videos[0].videoId);
          }
       }
    };
@@ -79,14 +79,14 @@ const VideoPlay = ({ activeVideoId, mainVideo, nextActive }) => {
    const onNext = () => {
       setActiveVideo({
          ...activeVideo,
-         url: mainVideo[currVidIndex + 1]
-            ? urlUtube + mainVideo[currVidIndex + 1].videoId
+         url: videos[currVidIndex + 1]
+            ? urlUtube + videos[currVidIndex + 1].videoId
             : null,
       });
       nextActive(
-         mainVideo[currVidIndex + 1]
-            ? mainVideo[currVidIndex + 1].videoId
-            : mainVideo[0].videoId
+         videos[currVidIndex + 1]
+            ? videos[currVidIndex + 1].videoId
+            : videos[0].videoId
       );
    };
 
@@ -94,19 +94,17 @@ const VideoPlay = ({ activeVideoId, mainVideo, nextActive }) => {
       if (currVidIndex > 0) {
          setActiveVideo({
             ...activeVideo,
-            url: mainVideo[currVidIndex - 1]
-               ? urlUtube + mainVideo[currVidIndex - 1].videoId
+            url: videos[currVidIndex - 1]
+               ? urlUtube + videos[currVidIndex - 1].videoId
                : null,
          });
       }
       nextActive(
-         mainVideo[currVidIndex - 1]
-            ? mainVideo[currVidIndex - 1].videoId
-            : mainVideo[0].videoId
+         videos[currVidIndex - 1]
+            ? videos[currVidIndex - 1].videoId
+            : videos[0].videoId
       );
    };
-
-   console.log(activeVideoId);
 
    return (
       <>

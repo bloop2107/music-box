@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
       overflow: "hidden",
       marginBottom: "10px",
       marginTop: "10px",
+      overflowX: "clip",
    },
    paper: {
       padding: theme.spacing(2),
@@ -36,47 +37,8 @@ const useStyles = makeStyles((theme) => ({
 
 const MusicBox = () => {
    const classes = useStyles();
-
-   const [mainVideo, setMainVideo] = useState([]);
    const [activeVideoId, setActiveVideoId] = useState("");
-   const [statusNotifiParent, setStatusNotifi] = useState({
-      open: false,
-      title: "",
-      type: "",
-   });
    const [selectedVideos, setSelectedVideos] = useState([]);
-
-   const handleMainVideo = (value) => {
-      const checkExist = mainVideo.find(
-         (video) => video.videoId === value.videoId
-      );
-      if (!checkExist) {
-         if (value.duration < 600) {
-            setMainVideo([...mainVideo, value]);
-            setStatusNotifi({
-               ...statusNotifiParent,
-               open: true,
-               title: "Add video successfully",
-               type: "success",
-            });
-         } else {
-            setStatusNotifi({
-               ...statusNotifiParent,
-               open: true,
-               title: "Video should not be more than 10 minutes",
-               type: "error",
-            });
-         }
-      } else {
-         setStatusNotifi({
-            ...statusNotifiParent,
-            open: true,
-            title: "Video exist",
-            type: "error",
-         });
-      }
-      console.log(value);
-   };
 
    const handleActiveVideo = (value) => {
       setActiveVideoId(value);
@@ -101,37 +63,27 @@ const MusicBox = () => {
       }
    };
 
-   console.log(selectedVideos);
-
    return (
-      <Container fixed className={classes.root}>
-         <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Grid container spacing={1}>
-               <LeftBar classes={classes} mainVideo={mainVideo} />
-               <Grid item xs={5}>
-                  <VideoPay
-                     nextActive={nextActive}
-                     activeVideoId={activeVideoId}
-                     mainVideo={mainVideo}
-                     className={classes.paper}
-                  />
-                  <ListVideos
-                     checkedVideo={checkedVideo}
-                     activeVideoId={activeVideoId}
-                     activeVideo={handleActiveVideo}
-                     mainVideo={mainVideo}
-                     classes={classes}
-                  />
-               </Grid>
-               <SearchVideo
-                  handleMainVideo={handleMainVideo}
+      <ThemeProvider theme={theme}>
+         <CssBaseline />
+         <Grid container spacing={1}>
+            <LeftBar classes={classes} />
+            <Grid item xs={5}>
+               <VideoPay
+                  nextActive={nextActive}
+                  activeVideoId={activeVideoId}
+                  className={classes.paper}
+               />
+               <ListVideos
+                  checkedVideo={checkedVideo}
+                  activeVideoId={activeVideoId}
+                  activeVideo={handleActiveVideo}
                   classes={classes}
                />
             </Grid>
-            <Notification statusNotifiParent={statusNotifiParent} />
-         </ThemeProvider>
-      </Container>
+            <SearchVideo classes={classes} />
+         </Grid>
+      </ThemeProvider>
    );
 };
 

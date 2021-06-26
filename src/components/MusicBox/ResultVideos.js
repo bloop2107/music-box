@@ -4,13 +4,15 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import Typography from "@material-ui/core/Typography";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Fade from "@material-ui/core/Fade";
 import { makeStyles } from "@material-ui/core/styles";
 import theme from "../../Theme";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Collapse from "@material-ui/core/Collapse";
+import { AppContext } from "../../Context/AppProvider";
+import Notification from "./Notification";
 
 const useStyles = makeStyles((theme) => ({
    root: {
@@ -58,6 +60,12 @@ const useStyles = makeStyles((theme) => ({
 const ResultVideos = ({ searchResults, res }) => {
    const classes = useStyles();
    const [collapse, setCollapse] = useState(false);
+   const { addVideo, videos } = useContext(AppContext);
+   const [statusNotifiParent, setStatusNotifi] = useState({
+      open: false,
+      title: "",
+      type: "",
+   });
 
    useEffect(() => {}, []);
 
@@ -73,6 +81,35 @@ const ResultVideos = ({ searchResults, res }) => {
       const value = e.currentTarget.value;
       const videoSelect = searchResults.find((item) => item.videoId === value);
       res(videoSelect);
+      const checkExist = videos.find(
+         (video) => video.videoId === videoSelect.videoId
+      );
+
+      if (!checkExist) {
+         if (videoSelect.duration > 600) {
+            setStatusNotifi({
+               ...statusNotifiParent,
+               open: true,
+               title: "Video should not be more than 10 minutes",
+               type: "error",
+            });
+         } else {
+            addVideo(videoSelect);
+            setStatusNotifi({
+               ...statusNotifiParent,
+               open: true,
+               title: "Add video successfully",
+               type: "success",
+            });
+         }
+      } else {
+         setStatusNotifi({
+            ...statusNotifiParent,
+            open: true,
+            title: "Video exist",
+            type: "error",
+         });
+      }
    };
    return (
       <ThemeProvider theme={theme}>
@@ -123,6 +160,7 @@ const ResultVideos = ({ searchResults, res }) => {
                ))}
             </Box>
          </Box>
+         <Notification statusNotifiParent={statusNotifiParent} />
       </ThemeProvider>
    );
 };

@@ -7,7 +7,7 @@ import ResultVideos from "./ResultVideos";
 import background from "../../asset/images/background.svg";
 import Box from "@material-ui/core/Box";
 
-const SearchVideo = ({ classes, handleMainVideo }) => {
+const SearchVideo = ({ classes }) => {
    const [searchResults, setSearchResults] = useState([]);
 
    const onVideoSearch = (value) => {
@@ -24,7 +24,6 @@ const SearchVideo = ({ classes, handleMainVideo }) => {
 
    const handleResult = (res) => {
       setSearchResults([]);
-      handleMainVideo(res);
    };
 
    return (
