@@ -11,7 +11,6 @@ import { useState } from "react";
 import VideoPay from "./VideoPlay";
 import Logo from "./Logo";
 import Notification from "./Notification";
-import LoginWithGoogle from "./LoginWithGoogle";
 import VideoCount from "./VideoCount";
 import theme from "../../Theme";
 import LeftBar from "./LeftBar";
