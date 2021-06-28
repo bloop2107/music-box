@@ -21,6 +21,7 @@ const LeftBar = ({ classes, mainVideo }) => {
                   <Avatar src={user.photoURL}>OP</Avatar>
                </Grid>
                <Grid
+                  container
                   alignItems="center"
                   display="flex"
                   justify="space-between"
