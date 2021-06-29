@@ -1,14 +1,8 @@
 import React from "react";
-import theme from "../../Theme";
-import { ThemeProvider } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import firebase, { auth, db } from "../../firebase/config";
-import { addDocument } from "../../firebase/services";
-
+import { FcGoogle } from "@react-icons/all-files/fc/FcGoogle";
 import { useHistory } from "react-router";
+import logo from "../../asset/images/logo.png";
 
 const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -38,15 +32,22 @@ const Login = () => {
    });
 
    return (
-      <ThemeProvider theme={theme}>
-         <Grid container justify="center">
-            <Paper elevation={3}>
-               <Button onClick={handleLoginGoogle} color="primary">
-                  Login with Google
-               </Button>
-            </Paper>
-         </Grid>
-      </ThemeProvider>
+      <div className="min-h-screen flex items-center justify-center bg-gray-800 py-12 px-4 sm:px-6 lg:px-8">
+         <div className="flex space-y-4 items-center flex-col border border-0 border-yellow-600 py-8 px-20 rounded-lg">
+            <img className="w-2/3" src={logo} alt="logo" />
+            <p className="text-yellow-500">
+               This is not Porn Hub 
+            </p>
+            <button
+            onClick={handleLoginGoogle}
+            className="flex items-center transition duration-500 ease-in-out bg-yellow-600 px-10 py-3 rounded-lg transform  hover:scale-110"
+         >
+            <FcGoogle size={25} />
+            <span className="pl-2">Login with Google</span>
+         </button>
+         </div>
+         
+      </div>
    );
 };
 

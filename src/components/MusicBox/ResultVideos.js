@@ -12,7 +12,9 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Collapse from "@material-ui/core/Collapse";
 import { AppContext } from "../../Context/AppProvider";
+import { AuthContext } from "../../Context/AuthProvider";
 import Notification from "./Notification";
+import { addDocument } from "../../firebase/services";
 
 const useStyles = makeStyles((theme) => ({
    root: {
@@ -66,6 +68,9 @@ const ResultVideos = ({ searchResults, res }) => {
       title: "",
       type: "",
    });
+   const {
+      user: { uid, photoURL, displayName },
+   } = useContext(AuthContext);
 
    useEffect(() => {}, []);
 
@@ -95,6 +100,12 @@ const ResultVideos = ({ searchResults, res }) => {
             });
          } else {
             addVideo(videoSelect);
+            addDocument("videos", {
+               video: videoSelect,
+               uid,
+               photoURL,
+               displayName,
+            });
             setStatusNotifi({
                ...statusNotifiParent,
                open: true,
