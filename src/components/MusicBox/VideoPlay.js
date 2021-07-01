@@ -30,7 +30,7 @@ const VideoPlay = ({ activeVideoId, nextActive }) => {
    }, [activeVideoId]);
 
    const currVidIndex = videos.findIndex(
-      (video) => urlUtube + video.videoId === activeVideo.url
+      (video) => urlUtube + video.video.videoId === activeVideo.url
    );
 
    const onEnded = () => {
@@ -38,14 +38,14 @@ const VideoPlay = ({ activeVideoId, nextActive }) => {
          setActiveVideo({
             ...activeVideo,
             url: videos[currVidIndex + 1]
-               ? urlUtube + videos[currVidIndex + 1].videoId
-               : urlUtube + videos[0].videoId,
+               ? urlUtube + videos[currVidIndex + 1].video.videoId
+               : urlUtube + videos[0].video.videoId,
          });
       }
       nextActive(
          videos[currVidIndex + 1]
-            ? videos[currVidIndex + 1].videoId
-            : videos[0].videoId
+            ? videos[currVidIndex + 1].video.videoId
+            : videos[0].video.videoId
       );
    };
 
@@ -68,10 +68,10 @@ const VideoPlay = ({ activeVideoId, nextActive }) => {
          } else {
             setActiveVideo({
                ...activeVideo,
-               url: urlUtube + videos[0].videoId,
+               url: urlUtube + videos[0].video.videoId,
                playing: true,
             });
-            nextActive(videos[0].videoId);
+            nextActive(videos[0].video.videoId);
          }
       }
    };

@@ -77,15 +77,17 @@ const ListVideos = ({ classes, checkedVideo, activeVideo, activeVideoId }) => {
             {videos.map((item, idx) => (
                <Box paddingRight="10px" display="flex" key={idx}>
                   <GreenCheckbox
-                     value={item.videoId}
+                     value={item.video.videoId}
                      inputProps={{ "aria-label": "primary checkbox" }}
                      onChange={handleCheckBox}
                   />
                   <ButtonBase
-                     value={item.videoId}
+                     value={item.video.videoId}
                      onClick={handleOnClick}
                      className={`${classList.button} ${
-                        item.videoId === activeVideoId ? classList.active : null
+                        item.video.videoId === activeVideoId
+                           ? classList.active
+                           : null
                      }`}
                   >
                      <ListItem button>
@@ -93,10 +95,10 @@ const ListVideos = ({ classes, checkedVideo, activeVideo, activeVideoId }) => {
                            <Avatar
                               variant="square"
                               alt="Remy Sharp"
-                              src={item.thumbnails[0].url}
+                              src={item.video.thumbnails[0].url}
                            />
                         </ListItemAvatar>
-                        <ListItemText primary={item.title} />
+                        <ListItemText primary={item.video.title} />
                      </ListItem>
                   </ButtonBase>
                   <Divider />
