@@ -11,7 +11,7 @@ const Login = () => {
       const { additionalUserInfo, user } = await auth.signInWithPopup(provider);
       const currentUser = auth.additionalUserInfo;
       if (additionalUserInfo?.isNewUser) {
-         db.collection("users").add({
+         db.collection('users').add({
             displayName: user.displayName,
             email: user.email,
             photoUrl: user.photoURL,

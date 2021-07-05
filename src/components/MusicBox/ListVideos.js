@@ -14,6 +14,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { orange } from "@material-ui/core/colors";
 import { useContext } from "react";
 import { AppContext } from "../../Context/AppProvider";
+import { deleteDocument } from '../../firebase/services';
 
 const GreenCheckbox = withStyles({
    root: {
@@ -69,6 +70,9 @@ const ListVideos = ({ classes, checkedVideo, activeVideo, activeVideoId }) => {
       }
       const storeChecked = Array.from(selectedCheckboxes);
       checkedVideo(selectedCheckboxes);
+
+      deleteDocument('videos', value);
+      console.log(value);
    };
 
    return (
@@ -77,8 +81,8 @@ const ListVideos = ({ classes, checkedVideo, activeVideo, activeVideoId }) => {
             {videos.map((item, idx) => (
                <Box paddingRight="10px" display="flex" key={idx}>
                   <GreenCheckbox
-                     value={item.video.videoId}
-                     inputProps={{ "aria-label": "primary checkbox" }}
+                     value={item.id}
+                     inputProps={{ 'aria-label': 'primary checkbox' }}
                      onChange={handleCheckBox}
                   />
                   <ButtonBase

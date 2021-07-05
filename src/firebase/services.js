@@ -8,3 +8,8 @@ export const addDocument = (collection, data) => {
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
    });
 };
+
+export const deleteDocument = (collection, id) => {
+   const query = db.collection(collection);
+   query.doc(id).delete();
+};
