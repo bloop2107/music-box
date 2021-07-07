@@ -8,10 +8,21 @@ import { auth } from "../../firebase/config";
 import { AppContext } from "../../Context/AppProvider";
 import Avatar from "@material-ui/core/Avatar";
 import { AuthContext } from "../../Context/AuthProvider";
+import { deleteDocument } from '../../firebase/services';
 
 const LeftBar = ({ classes, mainVideo }) => {
-   const { videos } = useContext(AppContext);
+   const { videos, videoSelect } = useContext(AppContext);
    const { user } = useContext(AuthContext);
+
+
+   const deleteVideo = () => {
+      console.log(videoSelect);
+      videoSelect.forEach((id) => {
+         deleteDocument('videos', id);
+      });
+   };
+
+
    return (
       <Grid item xs={3}>
          <Paper elevation={3} className={`${classes.paper} ${classes.spacing}`}>
@@ -40,6 +51,14 @@ const LeftBar = ({ classes, mainVideo }) => {
                </Grid>
             </Grid>
             <VideoCount totalVideo={videos.length} />
+            <Button
+               variant="contained"
+               color="primary"
+               style={{ width: '100%' }}
+               onClick={deleteVideo}
+            >
+               Delete Video
+            </Button>
          </Paper>
       </Grid>
    );

@@ -70,9 +70,6 @@ const ListVideos = ({ classes, checkedVideo, activeVideo, activeVideoId }) => {
       }
       const storeChecked = Array.from(selectedCheckboxes);
       checkedVideo(selectedCheckboxes);
-
-      deleteDocument('videos', value);
-      console.log(value);
    };
 
    return (

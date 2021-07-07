@@ -1,19 +1,14 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
 import SearchVideo from "./SearchVideo";
 import ListVideos from "./ListVideos";
-import { orange } from "@material-ui/core/colors";
-import { useState } from "react";
-import VideoPay from "./VideoPlay";
-import Logo from "./Logo";
-import Notification from "./Notification";
-import VideoCount from "./VideoCount";
+import { useState, useContext } from 'react';
+import VideoPay from './VideoPlay';
 import theme from "../../Theme";
 import LeftBar from "./LeftBar";
+import { AppContext } from '../../Context/AppProvider';
 
 const useStyles = makeStyles((theme) => ({
    root: {
@@ -38,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 const MusicBox = () => {
    const classes = useStyles();
    const [activeVideoId, setActiveVideoId] = useState("");
-   const [selectedVideos, setSelectedVideos] = useState([]);
+   const { videoSelect, setVideoSelect } = useContext(AppContext);
 
    const handleActiveVideo = (value) => {
       setActiveVideoId(value);
@@ -49,16 +44,15 @@ const MusicBox = () => {
    };
 
    const checkedVideo = (value) => {
-      const copyArr = [...selectedVideos];
+      const selectVideo = [...videoSelect];
       for (const id of value) {
-         const index = copyArr.indexOf(id);
-         if (selectedVideos.includes(id) === false) {
-            setSelectedVideos([...selectedVideos, id]);
+         if (selectVideo.includes(id)) {
+            let indexItem = selectVideo.indexOf(id);
+            selectVideo.splice(indexItem);
+            setVideoSelect(selectVideo);
          } else {
-            if (index !== -1) {
-               copyArr.splice(index, 1);
-               setSelectedVideos(copyArr);
-            }
+            selectVideo.push(id);
+            setVideoSelect(selectVideo);
          }
       }
    };
